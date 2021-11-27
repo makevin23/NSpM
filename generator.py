@@ -22,6 +22,7 @@ import sys
 import traceback
 from tqdm import tqdm
 import io
+import ssl
 
 from generator_utils import log_statistics, save_cache, query_dbpedia, strip_brackets, encode, read_template_file
 import importlib
@@ -321,6 +322,8 @@ if __name__ == '__main__':
     template_file = args.templates
     output_dir = args.output
     use_resources_dump = args.continue_generation
+
+    ssl._create_default_https_context = ssl._create_unverified_context
 
    # print use_resources_dump => False
 
