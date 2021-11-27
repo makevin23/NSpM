@@ -63,6 +63,7 @@ def extract_templates(qald):
     :return: list of Template objects
     '''
     templates = []
+    total = len(qald['questions'])
     for ques in qald['questions']:
         id = ques['id']
         sparql_query = ques['query']['sparql']
@@ -71,7 +72,8 @@ def extract_templates(qald):
                 question = que_str["string"]
                 keywords = reform_keywords(que_str["keywords"])
                 break
-        print('processing question <{}>'.format(question))
+        print('processing question <{}>'.format(question), end=" ")
+        print('{} / {}'.format(id, total))
         generator_query, changed_kw = create_generator_query(keywords, sparql_query)
         new_question, new_query = replace_keywords(changed_kw, question, sparql_query)
 
@@ -89,8 +91,9 @@ def extract_templates(qald):
                 target_class_3 = classes[2]
             except:
                 target_class_3 = ''
-
             templates.append(Template(target_class_1, target_class_2, target_class_3, new_question, new_query, generator_query, id))
+        else:
+            print('unable to find replacements for <{}>, ignored'.format(question))
     return templates
 
 def create_generator_query(keywords, query):
@@ -243,4 +246,5 @@ if __name__=='__main__':
     qald = read_json(dataset)
     templates = extract_templates(qald)
     output_csv(templates, output)
+    print('template output in {}'.format(output))
     
