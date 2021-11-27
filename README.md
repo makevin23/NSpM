@@ -26,6 +26,21 @@ pip install -r requirements.txt
 
 ## Example of usage
 
+### Generate template from qald json file
+
+To generate a template from a qald json file,
+you can use `qald_to_template.py` by command
+
+```bash
+python qald_to_template.py --input data\qald\qald-8-train-multilingual.json --output data\templates
+```
+
+`--input` is the input qald json file and
+`--output` is the repository, in which the template should be output.
+
+The template is named as `output.csv` under output repository.
+
+
 ### The Generator module
 
 #### Pre-generated data
