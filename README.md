@@ -32,7 +32,7 @@ To generate a template from a qald json file,
 you can use `qald_to_template.py` by command
 
 ```bash
-python qald_to_template.py --input data\qald\qald-8-train-multilingual.json --output data\templates
+python qald_to_template.py --input data/qald/qald-8-train-multilingual.json --output data/templates
 ```
 
 `--input` is the input qald json file and
