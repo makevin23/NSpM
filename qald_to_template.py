@@ -120,8 +120,8 @@ def create_generator_query(keywords, query):
                 where = where.replace(new_kw, '?'+chr(chr_num))
                 chr_num += 1
                 break
-    prefix = find_prefix(query)
-    generator_query = ' '.join(prefix) + " select distinct {} where {}".format(','.join(vars), where)
+    # prefix = find_prefix(query)
+    generator_query = "select distinct {} where {}".format(','.join(vars), where)
     return generator_query, changed_kw
 
 def extract_classes(query, keywords):
@@ -161,6 +161,11 @@ def extract_classes(query, keywords):
     return types
 
 def get_type(query: str) -> dict:
+    '''
+    used by extract_classes to get type of a keyword with prefix dbo
+    :query: sparql query to ask type in dbpedia
+    :return: type of the asked keyword
+    '''
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
@@ -226,6 +231,9 @@ def replace_keywords(keywords, question, query):
             kw_space = kw.replace('_',' ')
             if kw_space in question:
                 question = question.replace(kw_space, replace_char)
+    prefixes = find_prefix(query)
+    for prefix in prefixes:
+        query = query.replace(prefix, '').lstrip()
     return question, query
 
 
@@ -246,5 +254,5 @@ if __name__=='__main__':
     qald = read_json(dataset)
     templates = extract_templates(qald)
     output_csv(templates, output)
-    print('template output in {}'.format(output))
+    print('template is output in {}'.format(output))
     

@@ -70,9 +70,11 @@ Q5 = Q(
 )
 
 
-# Q1.test_replace_keywords()
-# Q2.test_replace_keywords()
-# Q3.test_replace_keywords()
+Q1.test_replace_keywords()
+Q2.test_replace_keywords()
+Q3.test_replace_keywords()
+Q4.test_replace_keywords()
+Q5.test_replace_keywords()
 
 # Q1.test_all()
 # Q2.test_all()
