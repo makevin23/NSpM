@@ -43,12 +43,15 @@ def create_dataset(path, num_examples):
   return zip(*word_pairs)
 
 def tokenize(lang):
+  # Tokenizer: https://stackoverflow.com/questions/51956000/what-does-keras-tokenizer-method-exactly-do
   lang_tokenizer = tf.keras.preprocessing.text.Tokenizer(
       filters='',lower=False)
   lang_tokenizer.fit_on_texts(lang)
 
+  # use index in word_index to represent lang
   tensor = lang_tokenizer.texts_to_sequences(lang)
 
+  # Pads sequences to the same length
   tensor = tf.keras.preprocessing.sequence.pad_sequences(tensor,
                                                          padding='post')
 

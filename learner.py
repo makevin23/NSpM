@@ -98,12 +98,21 @@ if __name__ == '__main__':
     output_dir = args.output
     BATCH_SIZE = int(args.BatchSize)
     Epoc=int(args.Epochs)
+    # merge data.en and data.sparql to one data.txt file
+    # output_direc = output_dic/data.txt
     output_direc = merging_datafile(input_dir,output_dir)
     pic_dir=input_dir+'/pickle_objects'
     os.mkdir(pic_dir)
 
     num_examples = None
+    # input_lang = sequence of questions text
+    # output_lang = sequence of modified sparql query
+    # use word embedding to replace index sequence
     input_tensor, target_tensor, inp_lang, targ_lang = load_dataset(output_direc, num_examples)
+    # input_tensor: tokenized natural language questions
+    # target_tensor: tokenized sparql queries
+    # input_lang: input tokenizer fitted with natural language questions
+    # targ_lang: target tokenizer fitted with sparql queries
     max_length_targ, max_length_inp = target_tensor.shape[1], input_tensor.shape[1]
     input_tensor_train, input_tensor_val, target_tensor_train, target_tensor_val = train_test_split(input_tensor, target_tensor, test_size=0.2)
 
@@ -114,10 +123,12 @@ if __name__ == '__main__':
     vocab_inp_size = len(inp_lang.word_index)+1
     vocab_tar_size = len(targ_lang.word_index)+1
 
+    # https://www.tensorflow.org/api_docs/python/tf/data/Dataset
     dataset = tf.data.Dataset.from_tensor_slices((input_tensor_train, target_tensor_train)).shuffle(BUFFER_SIZE)
     dataset = dataset.batch(BATCH_SIZE, drop_remainder=True)
     example_input_batch, example_target_batch = next(iter(dataset))
 
+    # https://www.tensorflow.org/tutorials/generative/autoencoder
     encoder = Encoder(vocab_inp_size, embedding_dim, units, BATCH_SIZE)
     decoder = Decoder(vocab_tar_size, embedding_dim, units, BATCH_SIZE)
     attention_layer = BahdanauAttention(10)
