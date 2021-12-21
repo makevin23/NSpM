@@ -114,21 +114,5 @@ data/pipeline_3*
 gsoc/anand/pipeline_3/utility/part-r-00000
 # data/*/*
 v1/
-data/qald/pickle_objects/BATCH_SIZE.pickle
-data/qald/pickle_objects/inp_lang.pickle
-data/qald/pickle_objects/input_tensor.pickle
-data/qald/pickle_objects/targ_lang.pickle
-data/qald/pickle_objects/target_tensor.pickle
-data/qald/training_checkpoints/checkpoint
-data/qald/training_checkpoints/ckpt-1.data-00000-of-00002
-data/qald/training_checkpoints/ckpt-1.data-00001-of-00002
-data/qald/training_checkpoints/ckpt-1.index
-data/qald/training_checkpoints/ckpt-2.data-00000-of-00002
-data/qald/training_checkpoints/ckpt-2.data-00001-of-00002
-data/qald/training_checkpoints/ckpt-2.index
-data/qald/training_checkpoints/ckpt-3.data-00000-of-00002
-data/qald/training_checkpoints/ckpt-3.data-00001-of-00002
-data/qald/training_checkpoints/ckpt-3.index
-data/qald/training_checkpoints/ckpt-4.data-00000-of-00002
-data/qald/training_checkpoints/ckpt-4.data-00001-of-00002
-data/qald/training_checkpoints/ckpt-4.index
+data/
+

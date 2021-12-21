@@ -23,5 +23,6 @@ tensorflow==2.1.0
 termcolor==1.1.0
 tqdm==4.43.0
 Werkzeug==1.0.0
+spacy-dbpedia-spotlight==0.2.1
 
 airML==0.0.3

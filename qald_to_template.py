@@ -13,6 +13,29 @@ import ssl
 from SPARQLWrapper import JSON
 from SPARQLWrapper import SPARQLWrapper
 
+PREFIXES = [
+        "PREFIX dbr: <http://dbpedia.org/resource/>",
+        "PREFIX dbo: <http://dbpedia.org/ontology/>",
+        "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
+        "PREFIX res: <http://dbpedia.org/resource/>",
+        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>",
+        "PREFIX dbc: <http://dbpedia.org/resource/Category:>",
+        "PREFIX dct: <http://purl.org/dc/terms/>",
+        "PREFIX dbp: <http://dbpedia.org/property/>",
+        "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>",
+        "PREFIX dct: <http://purl.org/dc/terms/>",
+        "PREFIX foaf: <http://xmlns.com/foaf/0.1/>",
+        "PREFIX skos: <http://www.w3.org/2004/02/skos/core#>",
+        "PREFIX foaf:<http://xmlns.com/foaf/0.1/>",
+        "PREFIX yago: <http://dbpedia.org/class/yago/>",
+        "PREFIX onto: <http://dbpedia.org/ontology/>",
+        "PREFIX db: <http://dbpedia.org/>",
+        "PREFIX dbo: <http://dbpedia.org/property/>",
+        "PREFIX dbp: <http://dbpedia.org/ontology/>",
+        "PREFIX class: <http://dbpedia.org/resource/classes#>",
+        "PREFIX dbr: <http://dbpedia.org/property/>"
+]
+
 
 class Template:
     '''
@@ -231,8 +254,8 @@ def replace_keywords(keywords, question, query):
             kw_space = kw.replace('_',' ')
             if kw_space in question:
                 question = question.replace(kw_space, replace_char)
-    prefixes = find_prefix(query)
-    for prefix in prefixes:
+    # prefixes = find_prefix(query)
+    for prefix in PREFIXES:
         query = query.replace(prefix, '').lstrip()
     return question, query
 
