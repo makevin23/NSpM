@@ -1,5 +1,9 @@
+from email import generator
+from venv import create
 from qald_to_template import create_generator_query, extract_classes, find_prefix, find_vars, reform_keywords, replace_keywords
 import ssl
+import unittest
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 class Q:
@@ -28,22 +32,7 @@ class Q:
     def test_replace_keywords(self):
         g_q, changed_kw = create_generator_query(self.keywords, self.query)
         new_question, new_query = replace_keywords(changed_kw, self.question, self.query)
-        print('new question: ')
-        print(new_question)
-        print('new_query: ')
-        print(new_query)
-    
-    def test_all(self):
-        self.test_generator_query()
-        self.test_classes()
-        self.test_replace_keywords()
-
-
-Q1 = Q(
-    "Who is the mayor of Tel Aviv?",
-    "PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX res: <http://dbpedia.org/resource/> SELECT DISTINCT ?uri WHERE { res:Tel_Aviv dbo:leaderName ?uri }",
-    "Tel Aviv, mayor"
-)
+        return new_question, new_query
 
 Q2 = Q(
     "Which movies starring Mickey Rourke were directed by Guy Ritchie?",
@@ -69,20 +58,28 @@ Q5 = Q(
     "five boroughs, New York"
 )
 
+class TestQtT(unittest.TestCase):
+    def test_57(self):
+        question = Q(
+                "Who is the mayor of Tel Aviv?",
+                "PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX res: <http://dbpedia.org/resource/> SELECT DISTINCT ?uri WHERE { res:Tel_Aviv dbo:leaderName ?uri }",
+                "Tel Aviv, mayor")
+        new_ques, new_query = question.test_replace_keywords()
+        self.assertEqual(new_ques, "who is the mayor of <A>?")
+        self.assertEqual(new_query, "SELECT DISTINCT ?uri WHERE { <A> dbo:leaderName ?uri }")
 
-Q1.test_replace_keywords()
-Q2.test_replace_keywords()
-Q3.test_replace_keywords()
-Q4.test_replace_keywords()
-Q5.test_replace_keywords()
+    def test_142(self):
+        question = Q(
+            "What is the currency of the Czech Republic?",
+            "PREFIX dbo: <http://dbpedia.org/ontology/> PREFIX res: <http://dbpedia.org/resource/> SELECT DISTINCT ?uri WHERE { res:Czech_Republic dbo:currency ?uri }",
+            "Czech republic, currency")
+        generator_query, changed_kw = create_generator_query(question.keywords, question.query)
+        self.assertEqual(generator_query, "select distinct ?a, ?b where { ?a ?b ?uri }")
+        new_ques, new_query = question.test_replace_keywords()
+        self.assertEqual(new_ques, "what is the <B> of the <A>?")
+        # self.assertEqual(new_query, "SELECT DISTINCT ?uri WHERE { <A> dbo:currency ?uri }")
 
-# Q1.test_all()
-# Q2.test_all()
-# Q3.test_all()
 
-# Q5.test_replace_keywords()
-# Q5.test_generator_query()
-# Q5.test_var()
-# Q5.test_replace_keywords()
 
-Q5.test_all()
+if __name__ == '__main__':
+    unittest.main()

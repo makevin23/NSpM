@@ -144,7 +144,7 @@ def create_generator_query(keywords, query):
                 chr_num += 1
                 break
     # prefix = find_prefix(query)
-    generator_query = "select distinct {} where {}".format(','.join(vars), where)
+    generator_query = "select distinct {} where {}".format(', '.join(vars), where)
     return generator_query, changed_kw
 
 def extract_classes(query, keywords):
@@ -163,15 +163,15 @@ def extract_classes(query, keywords):
                 instance_list = re.findall(r'[a-z]{3}:.*?'+kw, part)
                 if instance_list:
                     instance = instance_list[0]
-            type_query = '''
-                PREFIX dbr: <http://dbpedia.org/resource/>
-                PREFIX dbo: <http://dbpedia.org/ontology/>
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX res: <http://dbpedia.org/resource/>
-                SELECT ?type WHERE {{
-                    {} rdf:type ?type
-                }}
-            '''.format(instance)
+                    type_query = '''
+                        PREFIX dbr: <http://dbpedia.org/resource/>
+                        PREFIX dbo: <http://dbpedia.org/ontology/>
+                        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+                        PREFIX res: <http://dbpedia.org/resource/>
+                        SELECT ?type WHERE {{
+                            {} rdf:type ?type
+                        }}
+                    '''.format(instance)
             try:
                 type = get_type(type_query)
                 if type:
