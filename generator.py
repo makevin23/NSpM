@@ -46,7 +46,7 @@ SPECIAL_CLASSES = {
     'dbo:Athlete': ['dbo:LacrossePlayer'],
     'dbo:SportsTeam': ['dboBasketballTeam']
 }
-EXAMPLES_PER_TEMPLATE = 600
+EXAMPLES_PER_TEMPLATE = float("inf")
 
 
 def extract_bindings(data, template):
@@ -248,16 +248,26 @@ def get_results_of_generator_query(cache, template):
             results = cache[query]
             break
         logging.debug('{}. attempt generator_query: {}'.format(attempt, query))
-        results = query_dbpedia(query)
+        # results = query_dbpedia(query)
+        results = {'results':{'bindings':[]}}
+        # print(query)
+        for offset in range(0,2200000,10000):
+            # print(offset)
+            offset_results = query_dbpedia(query+' OFFSET {} LIMIT 10000'.format(offset))['results']['bindings']
+            if len(offset_results)==0:
+                break
+            results['results']['bindings'].extend(offset_results)
+        # print(results['results']['bindings'][:50])
         sufficient_examples = len(
-            results["results"]["bindings"]) >= EXAMPLES_PER_TEMPLATE/3
+            results["results"]["bindings"]) >= 400
         if sufficient_examples:
             cache[query] = results
             break
+        
     return results
 
 
-LABEL_REPLACEMENT = "  (str(?lab{variable}) as ?l{variable}) where {{ ?{variable} rdfs:label ?lab{variable} . FILTER(lang(?lab{variable}) = 'en') . "
+LABEL_REPLACEMENT = "  , str(?lab{variable}) as ?l{variable} where {{ ?{variable} rdfs:label ?lab{variable} . FILTER(lang(?lab{variable}) = 'en') . "
 CLASS_REPLACEMENT = " where {{ ?{variable} a {ontology_class} . "
 CLASSES_REPLACEMENT = " where {{ ?{variable} a ?t . VALUES (?t) {{ {classes} }} . "
 SUBCLASS_REPLACEMENT = " where {{ ?{variable} rdfs:subClassOf {ontology_class} . "
